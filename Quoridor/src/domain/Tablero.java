@@ -8,8 +8,8 @@ public class Tablero {
     private int filas,columnas;
 
     public Tablero(int filas,int columnas,Jugador jugador1 , Jugador jugador2){
-        this.filas = filas*2;
-        this.columnas = columnas*2;
+        this.filas = filas;
+        this.columnas = columnas;
         casillas = new Casilla[this.filas][this.columnas];
         Inicio(this.filas,this.columnas,jugador1,jugador2);
     }
@@ -23,17 +23,15 @@ public class Tablero {
         }
         casillas[0][(columna/2)-1].setLugar(jugador1.getNombre());
         jugador1.getFicha().setCoordenadas(new Point(0,(columna/2)-1));
-        System.out.println(jugador1.getFicha().getCoordenadas());
         casillas[fila-1][(columna/2)-1].setLugar(jugador2.getNombre());
-        jugador2.getFicha().setCoordenadas(new Point(0,(columna/2)-1));
-        System.out.println(jugador2.getFicha().getCoordenadas());
+        jugador2.getFicha().setCoordenadas(new Point(fila-1,(columna/2)-1));
     }
 
     public void moverFicha(Jugador jugadoractual,int fila,int columna) {
         Point coor = jugadoractual.getFicha().getCoordenadas();
         if (movimientoValido(fila,columna, coor.x, coor.y)) {
-            jugadoractual.jugar(fila, columna);
             actualizarCasilla(coor.x,coor.y,fila,columna,jugadoractual);
+            jugadoractual.jugar(fila, columna);
         }
     }
 
@@ -46,19 +44,25 @@ public class Tablero {
         if (filaNueva < 0 || filaNueva >= filas || columnaNueva < 0 || columnaNueva >= columnas) {
             return false;
         }
+
         // Verificar si la casilla destino está ocupada por otra ficha
         if (!casillas[filaNueva][columnaNueva].getLugar().equals("_")) {
             return false;
         }
-        // Verificar si el movimiento es horizontal o vertical
-        boolean movimientoHorizontal = filaNueva == filaActual && columnaNueva != columnaActual;
-        boolean movimientoVertical = filaNueva != filaActual && columnaNueva == columnaActual;
+
+        // Verificar si el movimiento es horizontal o vertical y si es de dos casillas
+        boolean movimientoHorizontal = filaNueva == filaActual && Math.abs(columnaNueva - columnaActual) == 2;
+        boolean movimientoVertical = columnaNueva == columnaActual && Math.abs(filaNueva - filaActual) == 2;
+
+        // Verificar si se cumple alguna de las condiciones de movimiento válido
         if (!(movimientoHorizontal || movimientoVertical)) {
             return false;
         }
+
         // Verificar si hay barreras en el camino (pendiente de implementación)
         return true;
     }
+
 
 
     public boolean movimientoValidoPared(){

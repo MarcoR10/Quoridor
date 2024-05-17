@@ -51,6 +51,7 @@ public class Quoridor {
 
                         // Resta la cantidad de veces que se utiliza las barreras //
                         jugadorActual.restaBarrreras();
+
                     }
                     break;
                 default:
@@ -72,7 +73,7 @@ public class Quoridor {
     public static void main(String[] args) {
         Humano jugador1 = new Humano("carlos","rojo");
         Humano jugador2 = new Humano("jennifer","azul");
-        Quoridor game = new Quoridor(10, 10,jugador1,jugador2);
+        Quoridor game = new Quoridor(20, 20,jugador1,jugador2);
         game.jugar();
     }
 
