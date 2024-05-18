@@ -6,7 +6,6 @@ public class Quoridor {
 
     private Jugador jugador1,jugador2,jugadorActual;
     private Tablero tablero;
-    private Walls Paredes;
     private Scanner scanner = new Scanner(System.in);
 
     public Quoridor(int filas,int columnas,Jugador jugador1,Jugador jugador2){
@@ -62,7 +61,17 @@ public class Quoridor {
         }
     }
 
-    public boolean Ganador(){
+    public boolean Ganador() {
+
+        if (jugador1.getFicha().estaEn(tablero.getFilas() - 1, jugador1.getFicha().getCoordenadas().y)) {
+            jugadorActual = jugador1;
+            return true;
+        }
+
+        if (jugador2.getFicha().estaEn(0, jugador2.getFicha().getCoordenadas().y)) {
+            jugadorActual = jugador2;
+            return true;
+        }
         return false;
     }
 

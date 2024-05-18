@@ -21,6 +21,7 @@ public class Tablero {
                 casillas[i][j] =  new Normal(i, j, "normal");
             }
         }
+        // Asignacion Jugadores
         casillas[0][(columna/2)-1].setLugar(jugador1.getNombre());
         jugador1.getFicha().setCoordenadas(new Point(0,(columna/2)-1));
         casillas[fila-1][(columna/2)-1].setLugar(jugador2.getNombre());
@@ -35,9 +36,65 @@ public class Tablero {
         }
     }
 
-    public void colocarPared(int fila,int columna,int fila2,int columna2){
+    public void colocarPared(int filaInicio, int columnaInicio, int filaFin, int columnaFin) {
+        // Verificar si la pared es horizontal o vertical
+        boolean esHorizontal = filaInicio == filaFin && Math.abs(columnaInicio - columnaFin) == 1;
+        boolean esVertical = columnaInicio == columnaFin && Math.abs(filaInicio - filaFin) == 1;
 
+        // Verificar si las coordenadas están dentro del rango del tablero
+        if (filaInicio < 0 || filaInicio >= filas || columnaInicio < 0 || columnaInicio >= columnas ||
+                filaFin < 0 || filaFin >= filas || columnaFin < 0 || columnaFin >= columnas) {
+            System.out.println("Coordenadas fuera del rango del tablero.");
+            return;
+        }
+
+        // Verificar si la orientación es válida
+        if (!(esHorizontal || esVertical)) {
+            System.out.println("Las coordenadas no forman una pared válida.");
+            return;
+        }
+
+        // Verificar si las casillas para la pared están disponibles
+        if (esHorizontal) {
+            if (!casillas[filaInicio][columnaInicio].getLugar().equals("_") ||
+                    !casillas[filaFin][columnaFin].getLugar().equals("_")) {
+                System.out.println("Una o ambas casillas ya están ocupadas.");
+                return;
+            }
+        } else if (esVertical) {
+            if (!casillas[filaInicio][columnaInicio].getLugar().equals("_") ||
+                    !casillas[filaFin][columnaFin].getLugar().equals("_")) {
+                System.out.println("Una o ambas casillas ya están ocupadas.");
+                return;
+            }
+        }
+
+        // Colocar la pared en las casillas correspondientes
+        if (esHorizontal) {
+            casillas[filaInicio][columnaInicio].setLugar("X");
+            casillas[filaFin][columnaFin].setLugar("X");
+        } else if (esVertical) {
+            casillas[filaInicio][columnaInicio].setLugar("|");
+            casillas[filaFin][columnaFin].setLugar("|");
+        }
+
+        // Verificar que no se bloquee completamente el camino para cualquier jugador
+        if (!caminoDisponible()) {
+            // Revertir la colocación de la pared si se bloquea el camino
+            casillas[filaInicio][columnaInicio].setLugar("_");
+            casillas[filaFin][columnaFin].setLugar("_");
+            System.out.println("La pared bloquea completamente el camino. Acción revertida.");
+            return;
+        }
     }
+
+    private boolean caminoDisponible() {
+        // Implementar la lógica para verificar que al menos un camino está disponible para cada jugador
+        // Esto generalmente implica realizar una búsqueda de caminos desde la posición actual de cada jugador
+        // hasta su lado objetivo del tablero.
+        return true; // Placeholder, necesita implementación completa.
+    }
+
 
     public boolean movimientoValido(int filaNueva, int columnaNueva, int filaActual, int columnaActual) {
         // Verificar si las coordenadas están dentro del rango del tablero
@@ -59,15 +116,24 @@ public class Tablero {
             return false;
         }
 
-        // Verificar si hay barreras en el camino (pendiente de implementación)
+        // Verificar si hay barreras en el camino
+        if (movimientoHorizontal) {
+            int columnaIntermedia = (columnaActual + columnaNueva) / 2;
+            if (!casillas[filaActual][columnaIntermedia].getLugar().equals("_")) {
+                return false;
+            }
+        } else if (movimientoVertical) {
+            int filaIntermedia = (filaActual + filaNueva) / 2;
+            if (!casillas[filaIntermedia][columnaActual].getLugar().equals("_")) {
+                return false;
+            }
+        }
+
+        // Si todas las verificaciones pasan, el movimiento es válido
         return true;
     }
 
 
-
-    public boolean movimientoValidoPared(){
-        return true;
-    }
 
     public void actualizarCasilla(int filaAnterior, int columnaAnterior, int filaNueva, int columnaNueva, Jugador jugador) {
         // Obtenemos la casilla anterior y la nueva
@@ -79,7 +145,9 @@ public class Tablero {
         casillaNueva.setLugar(jugador.getNombre());
     }
 
-
+    public int getFilas() {
+        return filas;
+    }
 
     public void imprimirTablero() {
         for (int i = 0; i < casillas.length; i++) {
