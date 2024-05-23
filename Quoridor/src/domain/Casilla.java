@@ -2,6 +2,8 @@ package domain;
 
 public abstract class  Casilla {
 
+    protected Jugador jugador;
+    protected Barrera barrera;
     protected int fila,columna;
     protected String type,lugar;
 
@@ -9,7 +11,8 @@ public abstract class  Casilla {
         this.fila = fila;
         this.columna = columna;
         this.type = type;
-        lugar = "_";
+        this.jugador = null;
+        this.barrera = null;
     }
 
     public char getTipo(){
@@ -17,12 +20,28 @@ public abstract class  Casilla {
         return tipo;
     }
 
-    public void setLugar(String lugar) {
-        this.lugar = lugar;
+    public Jugador getJugador() {
+        return jugador;
     }
 
-    public String getLugar() {
-        return lugar;
+    public void setJugador(Jugador jugador) {
+        this.jugador = jugador;
+    }
+
+    public void setJugadorNull() {
+        this.jugador = null;
+    }
+
+    public Barrera getBarrera() {
+        return barrera;
+    }
+
+    public void setBarrera(Barrera barrera) {
+        this.barrera = barrera;
+    }
+
+    public void setBarreraNull() {
+        this.barrera = null;
     }
 
 }

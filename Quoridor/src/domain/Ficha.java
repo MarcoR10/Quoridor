@@ -24,6 +24,10 @@ public class Ficha {
         return coordenadas.getX() == x && coordenadas.getY() == y;
     }
 
+    public char getNombre() {
+        return nombre;
+    }
+
     public Point getCoordenadas() {
         return coordenadas;
     }

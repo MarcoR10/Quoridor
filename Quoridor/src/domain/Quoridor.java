@@ -9,19 +9,24 @@ public class Quoridor {
     private Scanner scanner = new Scanner(System.in);
 
     public Quoridor(int filas,int columnas,Jugador jugador1,Jugador jugador2){
+
         this.jugador1 = jugador1;
         this.jugador2 = jugador2;
         this.jugadorActual = jugador1;
         tablero = new Tablero(filas,columnas,jugador1,jugador2);
+
     }
 
     public void jugar() {
         while(!Ganador()){
+
             System.out.println("¿Qué desea hacer?\n1. Mover una ficha\n2. Colocar un objeto\nIngrese el número correspondiente a su elección:");
             int accion = scanner.nextInt();
             tablero.imprimirTablero();
+
             switch (accion){
                 case 1:
+
                     System.out.println("Ingrese las coordenadas (x y):");
                     scanner.nextLine();
                     String entrada = scanner.nextLine();
@@ -30,6 +35,7 @@ public class Quoridor {
                     int columna = Integer.parseInt(partes[1]);
                     tablero.moverFicha(jugadorActual,fila,columna);
                     break;
+
                 case 2:
                     if(jugadorActual.getBarreras() != 0){
 
@@ -46,7 +52,7 @@ public class Quoridor {
                         String[] partes3 = entrada3.split(" ");
                         int fila3 = Integer.parseInt(partes3[0]);
                         int columna3 = Integer.parseInt(partes3[1]);
-                        tablero.colocarPared(fila2,columna2,fila3,columna3);
+                        tablero.colocarPared(fila2,columna2,fila3,columna3,jugadorActual);
 
                         // Resta la cantidad de veces que se utiliza las barreras //
                         jugadorActual.restaBarrreras();
@@ -56,8 +62,10 @@ public class Quoridor {
                 default:
                     System.out.println("Opción no válida. Por favor, seleccione 1 o 2.");
             }
+
             cambiarTurno();
             tablero.imprimirTablero();
+
         }
     }
 
@@ -66,6 +74,7 @@ public class Quoridor {
         if (jugador1.getFicha().estaEn(tablero.getFilas() - 1, jugador1.getFicha().getCoordenadas().y)) {
             jugadorActual = jugador1;
             return true;
+
         }
 
         if (jugador2.getFicha().estaEn(0, jugador2.getFicha().getCoordenadas().y)) {
@@ -80,9 +89,9 @@ public class Quoridor {
     }
 
     public static void main(String[] args) {
-        Humano jugador1 = new Humano("carlos","rojo");
-        Humano jugador2 = new Humano("jennifer","azul");
-        Quoridor game = new Quoridor(20, 20,jugador1,jugador2);
+        Humano jugador1 = new Humano("Zen","rojo");
+        Humano jugador2 = new Humano("Bigotes","azul");
+        Quoridor game = new Quoridor(10, 10,jugador1,jugador2);
         game.jugar();
     }
 

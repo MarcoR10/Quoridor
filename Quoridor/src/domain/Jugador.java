@@ -11,9 +11,8 @@ public abstract class Jugador {
     public Jugador(String nombre,String color) {
         this.nombre = nombre;
         this.color = color;
-        barreras = 10;
-        casillas = 0;
         ficha = new Ficha(nombre.charAt(0),new Point(0,0));
+        barreras = 10;
     }
 
     public abstract void jugar(int x, int y);
