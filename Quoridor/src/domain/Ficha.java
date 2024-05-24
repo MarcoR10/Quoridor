@@ -1,8 +1,9 @@
 package domain;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Ficha {
+public class Ficha implements Serializable {
 
     private char nombre;
     private Point coordenadas;

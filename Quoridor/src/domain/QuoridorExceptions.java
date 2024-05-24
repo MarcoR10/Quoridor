@@ -1,6 +1,8 @@
 package domain;
 
-public class QuoridorExceptions extends Exception{
+import java.io.Serializable;
+
+public class QuoridorExceptions extends Exception implements Serializable {
 
 
     public QuoridorExceptions(String message){

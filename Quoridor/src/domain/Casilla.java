@@ -1,6 +1,8 @@
 package domain;
 
-public abstract class  Casilla {
+import java.io.Serializable;
+
+public abstract class  Casilla implements Serializable {
 
     protected Jugador jugador;
     protected Barrera barrera;

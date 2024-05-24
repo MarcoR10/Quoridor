@@ -1,6 +1,8 @@
 package domain;
 
-public abstract class Barrera {
+import java.io.Serializable;
+
+public abstract class Barrera implements Serializable {
 
     protected int fila,columna;
     protected Jugador propietario;

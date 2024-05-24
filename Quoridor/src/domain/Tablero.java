@@ -1,25 +1,48 @@
 package domain;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Tablero {
 
     private Casilla[][] casillas;
     private int filas,columnas;
+    private boolean casillasE;
 
-    public Tablero(int filas,int columnas,Jugador jugador1 , Jugador jugador2){
+    public Tablero(int filas,int columnas,Jugador jugador1 , Jugador jugador2,boolean casillaE,boolean barreraE){
         this.filas = filas;
         this.columnas = columnas;
+        this.casillasE = casillaE;
         casillas = new Casilla[this.filas][this.columnas];
-        Inicio(this.filas,this.columnas,jugador1,jugador2);
+        Inicio(this.filas,this.columnas,jugador1,jugador2,casillaE);
     }
 
-    public void Inicio(int fila,int columna,Jugador jugador1 , Jugador jugador2){
-        for (int i = 0; i < fila; i++) {
-            for (int j = 0; j < columna; j++) {
-                casillas[i][j] =  new Normal(i, j, "normal");
+    public void Inicio(int fila,int columna,Jugador jugador1 , Jugador jugador2,boolean casillasE){
+        // Especificacion si existen casillas especiales //
+        if(casillasE){
+            Random random = new Random();
+            for (int i = 0; i < fila; i++) {
+                for (int j = 0; j < columna; j++) {
+                    int tipoCasilla = random.nextInt(100);
+                    if (tipoCasilla < 10) {  // 10% probabilidad de ser Teletransportador
+                        casillas[i][j] = new Teletransportador(i, j, "teletransportador");
+                    } else if (tipoCasilla < 20) {  // 10% probabilidad de ser Regresar
+                        casillas[i][j] = new Regreso(i, j, "regresar");
+                    } else if (tipoCasilla < 30) {  // 10% probabilidad de ser Turno Doble
+                        casillas[i][j] = new Doble(i, j, "doble");
+                    } else {
+                        casillas[i][j] = new Normal(i, j, "normal");
+                    }
+                }
+            }
+        }else {
+            for (int i = 0; i < fila; i++) {
+                for (int j = 0; j < columna; j++) {
+                    casillas[i][j] =  new Normal(i, j, "normal");
+                }
             }
         }
+        // Colocacion Jugadores //
         casillas[0][(columna/2)-1].setJugador(jugador1);
         jugador1.getFicha().setCoordenadas(new Point(0,(columna/2)-1));
         casillas[fila-1][(columna/2)-1].setJugador(jugador2);
@@ -28,10 +51,34 @@ public class Tablero {
 
     public void moverFicha(Jugador jugadoractual,int fila,int columna) {
         Point coor = jugadoractual.getFicha().getCoordenadas();
-        if (movimientoValido(fila,columna, coor.x, coor.y)) {
-            actualizarCasilla(coor.x,coor.y,fila,columna,jugadoractual);
-            jugadoractual.jugar(fila, columna);
+        Casilla casillaActual = casillas[coor.x][coor.y];
+
+        if (casillaActual instanceof Teletransportador) {
+            if (((Teletransportador) casillaActual).permiteMovimiento(fila, columna, this)) {
+                actualizarCasilla(coor.x, coor.y, fila, columna, jugadoractual);
+                jugadoractual.jugar(fila, columna);
+            }
+        }else if (casillaActual instanceof Regreso){
+            if (movimientoValido(fila, columna, coor.x, coor.y)) {
+                actualizarCasilla(coor.x, coor.y, fila, columna, jugadoractual);
+                jugadoractual.jugar(fila, columna);
+                ((Regreso) casillaActual).retrocederFicha(jugadoractual, this);
+            }
+        }else if (casillaActual instanceof Doble){
+            if (movimientoValido(fila, columna, coor.x, coor.y)) {
+
+                actualizarCasilla(coor.x, coor.y, fila, columna, jugadoractual);
+                jugadoractual.jugar(fila, columna);
+                System.out.println("¡Has obtenido un turno adicional!" + jugadoractual);
+                return;
+            }
+        }else {
+            if (movimientoValido(fila, columna, coor.x, coor.y)) {
+                actualizarCasilla(coor.x, coor.y, fila, columna, jugadoractual);
+                jugadoractual.jugar(fila, columna);
+            }
         }
+
     }
 
     public void colocarPared(int filaInicio, int columnaInicio, int filaFin, int columnaFin,Jugador jugador) {
@@ -85,6 +132,10 @@ public class Tablero {
         casillaNueva.setJugador(jugador);
     }
 
+    public Casilla getCasilla(int fila, int columna) {
+        return casillas[fila][columna];
+    }
+
     public int getFilas() {
         return filas;
     }
@@ -102,5 +153,26 @@ public class Tablero {
             }
             System.out.println();
         }
+
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                Casilla casilla = casillas[i][j];
+                if (casilla.getJugador() != null) {
+                    System.out.print(casilla.getJugador().getFicha().getNombre() + "\t");
+                } else if (casilla.getBarrera() != null) {
+                    System.out.print("X\t");
+                } else if (casilla instanceof Teletransportador) {
+                    System.out.print("T\t");
+                } else if (casilla instanceof Regreso) {
+                    System.out.print("R\t");
+                } else if (casilla instanceof Doble) {
+                    System.out.print("D\t");
+                } else {
+                    System.out.print("N\t");
+                }
+            }
+            System.out.println();
+        }
+
     }
 }

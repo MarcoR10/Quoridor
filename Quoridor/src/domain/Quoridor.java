@@ -1,25 +1,27 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class Quoridor {
+public class Quoridor implements Serializable {
 
     private Jugador jugador1,jugador2,jugadorActual;
+    private boolean casillas,barreras;
     private Tablero tablero;
     private Scanner scanner = new Scanner(System.in);
 
-    public Quoridor(int filas,int columnas,Jugador jugador1,Jugador jugador2){
-
+    public Quoridor(int filas,int columnas,Jugador jugador1,Jugador jugador2,boolean casillas,boolean barreras){
         this.jugador1 = jugador1;
         this.jugador2 = jugador2;
         this.jugadorActual = jugador1;
-        tablero = new Tablero(filas,columnas,jugador1,jugador2);
-
+        this.casillas = casillas;
+        this.barreras = barreras;
+        tablero = new Tablero(filas,columnas,jugador1,jugador2,casillas,barreras);
     }
 
     public void jugar() {
         while(!Ganador()){
-
+            System.out.println("Es el turno de : " + jugadorActual.nombre);
             System.out.println("¿Qué desea hacer?\n1. Mover una ficha\n2. Colocar un objeto\nIngrese el número correspondiente a su elección:");
             int accion = scanner.nextInt();
             tablero.imprimirTablero();
@@ -34,6 +36,15 @@ public class Quoridor {
                     int fila = Integer.parseInt(partes[0]);
                     int columna = Integer.parseInt(partes[1]);
                     tablero.moverFicha(jugadorActual,fila,columna);
+
+                    // Implementacion Clase Doble //
+                    Casilla casillaNueva = tablero.getCasilla(fila, columna);
+                    if (casillaNueva instanceof Doble && ((Doble) casillaNueva).otorgaTurnoAdicional()) {
+                        System.out.println("¡Has obtenido un turno adicional!");
+                        tablero.imprimirTablero();
+                        continue; // No cambiar de turno
+                    }
+                    //--------------------------------//
                     break;
 
                 case 2:
@@ -70,13 +81,12 @@ public class Quoridor {
     }
 
     public boolean Ganador() {
-
+        // Verifica si los jugadores estan en pocision de ganar //
         if (jugador1.getFicha().estaEn(tablero.getFilas() - 1, jugador1.getFicha().getCoordenadas().y)) {
             jugadorActual = jugador1;
             return true;
 
         }
-
         if (jugador2.getFicha().estaEn(0, jugador2.getFicha().getCoordenadas().y)) {
             jugadorActual = jugador2;
             return true;
@@ -91,7 +101,7 @@ public class Quoridor {
     public static void main(String[] args) {
         Humano jugador1 = new Humano("Zen","rojo");
         Humano jugador2 = new Humano("Bigotes","azul");
-        Quoridor game = new Quoridor(10, 10,jugador1,jugador2);
+        Quoridor game = new Quoridor(10, 10,jugador1,jugador2,true,false);
         game.jugar();
     }
 

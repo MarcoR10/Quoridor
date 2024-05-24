@@ -1,6 +1,8 @@
 package domain;
 
-public class BarreraNormal extends Barrera {
+import java.io.Serializable;
+
+public class BarreraNormal extends Barrera implements Serializable {
 
     public BarreraNormal(int filaInicio, int columnaInicio, Jugador propietario) {
         super(filaInicio, columnaInicio, propietario);

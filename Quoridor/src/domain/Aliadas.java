@@ -1,6 +1,8 @@
 package domain;
 
-public class Aliadas extends Barrera{
+import java.io.Serializable;
+
+public class Aliadas extends Barrera implements Serializable {
 
     public Aliadas(int filaInicio, int columnaInicio,Jugador propietario) {
         super(filaInicio, columnaInicio, propietario);

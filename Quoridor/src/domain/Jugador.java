@@ -1,8 +1,9 @@
 package domain;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public abstract class Jugador {
+public abstract class Jugador implements Serializable {
 
     protected Ficha ficha;
     protected String nombre ,color;

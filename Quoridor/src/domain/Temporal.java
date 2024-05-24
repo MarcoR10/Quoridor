@@ -1,6 +1,8 @@
 package domain;
 
-public class Temporal extends Barrera {
+import java.io.Serializable;
+
+public class Temporal extends Barrera implements Serializable {
     private int turnosRestantes;
 
     public Temporal(int filaInicio, int columnaInicio, Jugador propietario) {

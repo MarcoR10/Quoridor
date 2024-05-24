@@ -1,9 +1,10 @@
 package domain;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class Humano extends Jugador {
+public class Humano extends Jugador implements Serializable {
 
     public Humano(String nombre ,String color){
         super(nombre,color);
