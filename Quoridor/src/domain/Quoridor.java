@@ -7,15 +7,17 @@ public class Quoridor implements Serializable {
 
     private Jugador jugador1,jugador2,jugadorActual;
     private boolean casillas,barreras;
+    private String modoJuego;
     private Tablero tablero;
     private Scanner scanner = new Scanner(System.in);
 
-    public Quoridor(int filas,int columnas,Jugador jugador1,Jugador jugador2,boolean casillas,boolean barreras){
+    public Quoridor(int filas,int columnas,Jugador jugador1,Jugador jugador2,boolean casillas,boolean barreras,String modoJuego){
         this.jugador1 = jugador1;
         this.jugador2 = jugador2;
         this.jugadorActual = jugador1;
         this.casillas = casillas;
         this.barreras = barreras;
+        this.modoJuego = modoJuego;
         tablero = new Tablero(filas,columnas,jugador1,jugador2,casillas,barreras);
     }
 
@@ -101,7 +103,7 @@ public class Quoridor implements Serializable {
     public static void main(String[] args) {
         Humano jugador1 = new Humano("Zen","rojo");
         Humano jugador2 = new Humano("Bigotes","azul");
-        Quoridor game = new Quoridor(10, 10,jugador1,jugador2,true,false);
+        Quoridor game = new Quoridor(10, 10,jugador1,jugador2,true,false,"Normal");
         game.jugar();
     }
 

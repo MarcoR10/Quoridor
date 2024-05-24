@@ -8,12 +8,13 @@ import java.awt.event.WindowEvent;
 
 public class Configuracion extends JFrame {
 
-    private String NombreJ1, NombreJ2;
+    private String NombreJ1, NombreJ2,tipoJ1,tipoJ2,modoJuego,casillas,barreras;
+    private boolean casillasI,barrerasI;
     private JTextField nombreJugador1, nombreJugador2;
     private JLabel Nombre1, Nombre2, Color1, Color2, CasillasE, barrerasE, TipoJugador1, TipoJugador2, Modo, TamañoT;
     private JComboBox<String> comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6;
     private JButton colorJugador1, colorJugador2, confirm;
-    private String[] opciones, opciones2, opciones3, opciones4, opciones5, opciones6;
+    private String[] opciones, opciones2, opciones3, opciones4, opciones5;
     private Color ColorP1, ColorP2;
     private Dimension Pantalla;
 
@@ -24,6 +25,7 @@ public class Configuracion extends JFrame {
 
     private void prepareElements() {
         //-------------------------//
+        setTitle("Configuracion");
         Pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(Pantalla.width, Pantalla.height);
         setLocationRelativeTo(null);
@@ -116,7 +118,7 @@ public class Configuracion extends JFrame {
         CasillasE.setBounds(500, 315, 250, 100);
         PanelConfiguracion.add(CasillasE);
         //-------------------------//
-        opciones4 = new String[]{"False", "True"};
+        opciones4 = new String[]{"false", "true"};
         comboBox4 = new JComboBox<>(opciones4);
         comboBox4.setBounds(650, 350, 150, 30);
         PanelConfiguracion.add(comboBox4);
@@ -127,21 +129,10 @@ public class Configuracion extends JFrame {
         barrerasE.setBounds(500, 365, 250, 100);
         PanelConfiguracion.add(barrerasE);
         //-------------------------//
-        opciones5 = new String[]{"False", "True"};
+        opciones5 = new String[]{"false", "true"};
         comboBox5 = new JComboBox<>(opciones5);
         comboBox5.setBounds(650, 400, 150, 30);
         PanelConfiguracion.add(comboBox5);
-        //-------------------------//
-        TamañoT = new JLabel("Tamaño del Tablero:");
-        TamañoT.setFont(new Font("Bodoni MT Cursiva", Font.BOLD, 15));
-        TamañoT.setForeground(Color.WHITE);
-        TamañoT.setBounds(500, 415, 250, 100);
-        PanelConfiguracion.add(TamañoT);
-        //-------------------------//
-        opciones6 = new String[]{"Minimo", "Estandar", "Grande"};
-        comboBox6 = new JComboBox<>(opciones6);
-        comboBox6.setBounds(650, 450, 150, 30);
-        PanelConfiguracion.add(comboBox6);
         //-------------------------//
         confirm = new JButton("Confirmar");
         confirm.setFont(new Font("Bodoni MT Cursiva", Font.BOLD, 20));
@@ -196,7 +187,14 @@ public class Configuracion extends JFrame {
         confirm.addActionListener(e -> {
             NombreJ1 = nombreJugador1.getText();
             NombreJ2 = nombreJugador2.getText();
-            // prepareElementsBoard();
+            tipoJ1  = (String) comboBox1.getSelectedItem();
+            tipoJ2  = (String) comboBox1.getSelectedItem();
+            modoJuego = comboBox3.getSelectedItem().toString();
+            barreras = (String) comboBox4.getSelectedItem();
+            barrerasI = Boolean.parseBoolean(barreras);
+            casillas = (String) comboBox5.getSelectedItem();
+            casillasI = Boolean.parseBoolean(casillas);
+            abrirJuego(NombreJ1,NombreJ2,tipoJ1,tipoJ2,modoJuego,barrerasI,casillasI);
         });
 
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -205,6 +203,12 @@ public class Configuracion extends JFrame {
                 Salida();
             }
         });
+    }
+
+    private void abrirJuego(String nombreJ1, String nombreJ2, String tipoJ1, String tipoJ2, String modoJuego, boolean barreras, boolean casillas) {
+        Juego juego = new Juego(nombreJ1,nombreJ2,tipoJ1,tipoJ2,modoJuego,barreras,casillas);
+        juego.setVisible(true);
+        this.dispose();
     }
 
     private void Salida() {
