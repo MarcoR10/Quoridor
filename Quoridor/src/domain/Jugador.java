@@ -33,4 +33,8 @@ public abstract class Jugador implements Serializable {
     public Ficha getFicha() {
         return ficha;
     }
+
+    public String getColor() {
+        return color;
+    }
 }

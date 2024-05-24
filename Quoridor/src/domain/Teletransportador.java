@@ -11,10 +11,8 @@ public class Teletransportador extends Casilla implements Serializable {
     public boolean permiteMovimiento(int filaDestino, int columnaDestino, Tablero tablero) {
         int deltaFila = Math.abs(fila - filaDestino);
         int deltaColumna = Math.abs(columna - columnaDestino);
-        if (deltaFila <= 1 && deltaColumna <= 1) {
-            if (tablero.getCasilla(filaDestino, columnaDestino).getJugador() == null) {
-                return true;
-            }
+        if ((deltaFila <= 1 && deltaColumna <= 1) && tablero.getCasilla(filaDestino, columnaDestino).getJugador() == null) {
+            return true;
         }
         return false;
     }

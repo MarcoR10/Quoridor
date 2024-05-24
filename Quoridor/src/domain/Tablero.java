@@ -56,21 +56,19 @@ public class Tablero {
         if (casillaActual instanceof Teletransportador) {
             if (((Teletransportador) casillaActual).permiteMovimiento(fila, columna, this)) {
                 actualizarCasilla(coor.x, coor.y, fila, columna, jugadoractual);
-                jugadoractual.jugar(fila, columna);
+                jugadoractual.getFicha().setCoordenadas(new Point(fila, columna));
             }
         }else if (casillaActual instanceof Regreso){
             if (movimientoValido(fila, columna, coor.x, coor.y)) {
                 actualizarCasilla(coor.x, coor.y, fila, columna, jugadoractual);
-                jugadoractual.jugar(fila, columna);
-                ((Regreso) casillaActual).retrocederFicha(jugadoractual, this);
+                jugadoractual.getFicha().setCoordenadas(new Point(fila, columna));
+                ((Regreso) casillaActual).realizarAccion(jugadoractual, this);
             }
         }else if (casillaActual instanceof Doble){
             if (movimientoValido(fila, columna, coor.x, coor.y)) {
-
                 actualizarCasilla(coor.x, coor.y, fila, columna, jugadoractual);
                 jugadoractual.jugar(fila, columna);
                 System.out.println("¡Has obtenido un turno adicional!" + jugadoractual);
-                return;
             }
         }else {
             if (movimientoValido(fila, columna, coor.x, coor.y)) {

@@ -1,5 +1,6 @@
 package domain;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.Scanner;
 
@@ -101,8 +102,8 @@ public class Quoridor implements Serializable {
     }
 
     public static void main(String[] args) {
-        Humano jugador1 = new Humano("Zen","rojo");
-        Humano jugador2 = new Humano("Bigotes","azul");
+        Humano jugador1 = new Humano("Zen","Rojo");
+        Humano jugador2 = new Humano("Bigotes","Azul");
         Quoridor game = new Quoridor(10, 10,jugador1,jugador2,true,false,"Normal");
         game.jugar();
     }
