@@ -1,6 +1,5 @@
 package domain;
 
-import java.awt.*;
 import java.io.Serializable;
 import java.util.Scanner;
 
@@ -23,15 +22,14 @@ public class Quoridor implements Serializable {
     }
 
     public void jugar() {
+        tablero.imprimirTipoTablero();
         while(!Ganador()){
             System.out.println("Es el turno de : " + jugadorActual.nombre);
             System.out.println("¿Qué desea hacer?\n1. Mover una ficha\n2. Colocar un objeto\nIngrese el número correspondiente a su elección:");
-            int accion = scanner.nextInt();
             tablero.imprimirTablero();
-
+            int accion = scanner.nextInt();
             switch (accion){
                 case 1:
-
                     System.out.println("Ingrese las coordenadas (x y):");
                     scanner.nextLine();
                     String entrada = scanner.nextLine();
@@ -39,59 +37,48 @@ public class Quoridor implements Serializable {
                     int fila = Integer.parseInt(partes[0]);
                     int columna = Integer.parseInt(partes[1]);
                     tablero.moverFicha(jugadorActual,fila,columna);
-
-                    // Implementacion Clase Doble //
+                    //-------------------//
                     Casilla casillaNueva = tablero.getCasilla(fila, columna);
                     if (casillaNueva instanceof Doble && ((Doble) casillaNueva).otorgaTurnoAdicional()) {
-                        System.out.println("¡Has obtenido un turno adicional!");
                         tablero.imprimirTablero();
-                        continue; // No cambiar de turno
+                        continue;
                     }
-                    //--------------------------------//
+                    //-------------------//
                     break;
-
                 case 2:
                     if(jugadorActual.getBarreras() != 0){
-
-                        System.out.println("Ingrse las coordenadas de inicio (x y):");
+                        System.out.println("Ingrese las coordenadas de inicio (x y):");
                         scanner.nextLine();
                         String entrada2 = scanner.nextLine();
                         String[] partes2 = entrada2.split(" ");
-
                         int fila2 = Integer.parseInt(partes2[0]);
                         int columna2 = Integer.parseInt(partes2[1]);
-
                         System.out.println("Ingrese las coordenadas final (x y):");
                         String entrada3 = scanner.nextLine();
                         String[] partes3 = entrada3.split(" ");
                         int fila3 = Integer.parseInt(partes3[0]);
                         int columna3 = Integer.parseInt(partes3[1]);
-                        tablero.colocarPared(fila2,columna2,fila3,columna3,jugadorActual);
-
-                        // Resta la cantidad de veces que se utiliza las barreras //
+                        tablero.colocarPared(fila2,columna2,fila3,columna3,jugadorActual,barreras);
                         jugadorActual.restaBarrreras();
-
                     }
                     break;
                 default:
                     System.out.println("Opción no válida. Por favor, seleccione 1 o 2.");
             }
-
             cambiarTurno();
-            tablero.imprimirTablero();
-
         }
     }
 
     public boolean Ganador() {
-        // Verifica si los jugadores estan en pocision de ganar //
         if (jugador1.getFicha().estaEn(tablero.getFilas() - 1, jugador1.getFicha().getCoordenadas().y)) {
             jugadorActual = jugador1;
+            System.out.println("!!Felicidades el jugador " + jugadorActual.nombre + " ha ganado!!");
             return true;
 
         }
         if (jugador2.getFicha().estaEn(0, jugador2.getFicha().getCoordenadas().y)) {
             jugadorActual = jugador2;
+            System.out.println("!!Felicidades el jugador " + jugadorActual.nombre + " ha ganado!!");
             return true;
         }
         return false;
@@ -104,7 +91,7 @@ public class Quoridor implements Serializable {
     public static void main(String[] args) {
         Humano jugador1 = new Humano("Zen","Rojo");
         Humano jugador2 = new Humano("Bigotes","Azul");
-        Quoridor game = new Quoridor(10, 10,jugador1,jugador2,true,false,"Normal");
+        Quoridor game = new Quoridor(5, 5,jugador1,jugador2,true,false,"Normal");
         game.jugar();
     }
 

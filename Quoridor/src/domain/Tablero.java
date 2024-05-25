@@ -2,23 +2,25 @@ package domain;
 
 import java.awt.*;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Tablero {
 
     private Casilla[][] casillas;
     private int filas,columnas;
     private boolean casillasE;
+    private Scanner scanner;
 
     public Tablero(int filas,int columnas,Jugador jugador1 , Jugador jugador2,boolean casillaE,boolean barreraE){
         this.filas = filas;
         this.columnas = columnas;
         this.casillasE = casillaE;
         casillas = new Casilla[this.filas][this.columnas];
+        this.scanner = new Scanner(System.in);
         Inicio(this.filas,this.columnas,jugador1,jugador2,casillaE);
     }
 
     public void Inicio(int fila,int columna,Jugador jugador1 , Jugador jugador2,boolean casillasE){
-        // Especificacion si existen casillas especiales //
         if(casillasE){
             Random random = new Random();
             for (int i = 0; i < fila; i++) {
@@ -51,20 +53,35 @@ public class Tablero {
 
     public void moverFicha(Jugador jugadoractual,int fila,int columna) {
         Point coor = jugadoractual.getFicha().getCoordenadas();
-        Casilla casillaActual = casillas[coor.x][coor.y];
-
-        if (casillaActual instanceof Teletransportador) {
-            if (((Teletransportador) casillaActual).permiteMovimiento(fila, columna, this)) {
+        Casilla casillaProxima = casillas[fila][columna];
+        if (casillaProxima instanceof Teletransportador) {
+            if (movimientoValido(fila, columna, coor.x, coor.y)){
                 actualizarCasilla(coor.x, coor.y, fila, columna, jugadoractual);
-                jugadoractual.getFicha().setCoordenadas(new Point(fila, columna));
+                jugadoractual.getFicha().mover(fila,columna);
+                //-------------------------------------------------------------------------------//
+                System.out.println("Ingrese las coordenadas alas que desea teleportarse (x y):");
+                String MovT = scanner.nextLine();
+                String[] telpot = MovT.split(" ");
+                //-------------------------------------------------------------------------------//
+                int filaT = Integer.parseInt(telpot[0]);
+                int columnaT = Integer.parseInt(telpot[1]);
+                //-------------------------------------------------------------------------------//
+                if (((Teletransportador) casillaProxima).permiteMovimiento(filaT,columnaT,this)){
+                    Point coor2 = jugadoractual.getFicha().getCoordenadas();
+                    actualizarCasilla(coor2.x,coor2.y,filaT,columnaT,jugadoractual);
+                    ((Teletransportador) casillaProxima).teleport(jugadoractual);
+                }else {
+                    System.out.println(" Teletrasnportador Fallido ");
+                }
+                //-------------------------------------------------------------------------------//
             }
-        }else if (casillaActual instanceof Regreso){
+        }else if (casillaProxima instanceof Regreso){
             if (movimientoValido(fila, columna, coor.x, coor.y)) {
                 actualizarCasilla(coor.x, coor.y, fila, columna, jugadoractual);
-                jugadoractual.getFicha().setCoordenadas(new Point(fila, columna));
-                ((Regreso) casillaActual).realizarAccion(jugadoractual, this);
+                jugadoractual.getFicha().mover(fila,columna);
+                ((Regreso)casillaProxima).retrocederFicha(jugadoractual,this);
             }
-        }else if (casillaActual instanceof Doble){
+        }else if (casillaProxima instanceof Doble){
             if (movimientoValido(fila, columna, coor.x, coor.y)) {
                 actualizarCasilla(coor.x, coor.y, fila, columna, jugadoractual);
                 jugadoractual.jugar(fila, columna);
@@ -79,12 +96,19 @@ public class Tablero {
 
     }
 
-    public void colocarPared(int filaInicio, int columnaInicio, int filaFin, int columnaFin,Jugador jugador) {
-        Barrera BarreI = new BarreraNormal(filaInicio, columnaInicio, jugador);
-        Barrera BarreF = new BarreraNormal(filaInicio, columnaInicio, jugador);
-        if (esColocacionValida(BarreI,BarreF)) {
-            casillas[filaInicio][columnaInicio].setBarrera(BarreI);
-            casillas[filaFin][columnaFin].setBarrera(BarreF);
+    public void colocarPared(int filaInicio, int columnaInicio, int filaFin, int columnaFin,Jugador jugador,boolean barrerasE) {
+        if (barrerasE){
+            System.out.println("Escoge el tipo de barrera que quieres : \n 1. Normal 2. Temporal 3.Larga 4.Aliadas ");
+            scanner.nextLine();
+            int tipo = Integer.parseInt(scanner.nextLine());
+            //switch ()
+        }else {
+            Barrera BarreI = new BarreraNormal(filaInicio, columnaInicio, jugador);
+            Barrera BarreF = new BarreraNormal(filaInicio, columnaInicio, jugador);
+            if (esColocacionValida(BarreI,BarreF)) {
+                casillas[filaInicio][columnaInicio].setBarrera(BarreI);
+                casillas[filaFin][columnaFin].setBarrera(BarreF);
+            }
         }
     }
 
@@ -151,7 +175,9 @@ public class Tablero {
             }
             System.out.println();
         }
+    }
 
+    public void imprimirTipoTablero(){
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 Casilla casilla = casillas[i][j];
@@ -171,6 +197,5 @@ public class Tablero {
             }
             System.out.println();
         }
-
     }
 }

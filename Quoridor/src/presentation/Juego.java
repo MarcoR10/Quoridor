@@ -13,7 +13,7 @@ public class Juego extends JFrame{
 
     private Quoridor Game;
     private JPanel Juego,Player1,Player2;
-    private JButton[][] buttons;
+    private CirculoEnBoton[][] buttons;
     private JMenu archivo, settings;
     private JMenuBar menuBar;
     private JMenuItem load, save, start, quit, terminar;
@@ -45,10 +45,10 @@ public class Juego extends JFrame{
         //--------------------------------------------//
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        buttons = new JButton[10][10];
+        buttons = new CirculoEnBoton[10][10];
         for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
-                buttons[row][col] = new JButton(); ;
+                buttons[row][col] = new CirculoEnBoton(); ;
                 buttons[row][col].setBackground(Color.WHITE);
                 gbc.gridx = col;
                 gbc.gridy = row;
@@ -206,6 +206,26 @@ public class Juego extends JFrame{
             }
         });
     }
+}
 
+class CirculoEnBoton extends JButton {
+    private Color colorCirculo;
 
+    public CirculoEnBoton() {
+        super();
+        this.colorCirculo = null;
+    }
+
+    public void setColorCirculo(Color color) {
+        this.colorCirculo = color;
+        repaint();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        int diametro = Math.min(getWidth(), getHeight()) - 6; // Diámetro del círculo
+        g.setColor(colorCirculo);
+        g.fillOval((getWidth() - diametro) / 2, (getHeight() - diametro) / 2, diametro, diametro);
+    }
 }

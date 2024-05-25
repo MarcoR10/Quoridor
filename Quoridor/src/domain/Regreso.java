@@ -4,34 +4,22 @@ import java.awt.*;
 import java.io.Serializable;
 
 public class Regreso extends Casilla implements Serializable {
-
-
     public Regreso(int fila, int columna, String type) {
         super(fila, columna, type);
     }
 
     public void retrocederFicha(Jugador jugador, Tablero tablero) {
         Point coor = jugador.getFicha().getCoordenadas();
+        int filaRetroceder;
         if(jugador.getColor().equals("Rojo")){
-            int filaRetroceder = coor.x - 2; // Retroceder dos filas
-            if (filaRetroceder >= 0 && tablero.getCasilla(filaRetroceder, coor.y).getJugador() == null) {
-                tablero.actualizarCasilla(coor.x, coor.y, filaRetroceder, coor.y, jugador);
-                jugador.getFicha().setCoordenadas(new Point(filaRetroceder, coor.y));
-            }
+            filaRetroceder = coor.x - 2;
+        }else {
+            filaRetroceder = coor.x + 2;
         }
-        if (jugador.getColor().equals("Azul")){
-            int filaRetroceder = coor.x + 2; // Retroceder dos filas
-            if (filaRetroceder >= 0 && tablero.getCasilla(filaRetroceder, coor.y).getJugador() == null) {
-                tablero.actualizarCasilla(coor.x, coor.y, filaRetroceder, coor.y, jugador);
-                jugador.getFicha().setCoordenadas(new Point(filaRetroceder, coor.y));
-            }
+        if (filaRetroceder >= 0 && filaRetroceder <= tablero.getFilas() && tablero.getCasilla(filaRetroceder, coor.y).getJugador() == null) {
+            tablero.actualizarCasilla(coor.x, coor.y, filaRetroceder, coor.y, jugador);
+            jugador.getFicha().mover(filaRetroceder, coor.y);
         }
-
     }
-
-    public void realizarAccion(Jugador jugador, Tablero tablero) {
-        retrocederFicha(jugador, tablero);
-    }
-
 
 }

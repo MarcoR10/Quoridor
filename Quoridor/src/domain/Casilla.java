@@ -42,8 +42,4 @@ public abstract class  Casilla implements Serializable {
         this.barrera = barrera;
     }
 
-    public void setBarreraNull() {
-        this.barrera = null;
-    }
-
 }
