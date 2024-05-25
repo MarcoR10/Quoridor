@@ -89,6 +89,10 @@ public class Quoridor implements Serializable {
         jugadorActual = (jugadorActual == jugador1) ? jugador2 : jugador1;
     }
 
+    public Jugador getJugadorActual(){
+        return jugadorActual;
+    }
+
     public static void main(String[] args) {
         Humano jugador1 = new Humano("Zen","Rojo");
         Humano jugador2 = new Humano("Bigotes","Azul");

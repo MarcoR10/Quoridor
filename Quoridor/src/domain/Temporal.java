@@ -11,6 +11,10 @@ public class Temporal extends Barrera implements Serializable {
         this.turnosRestantes = 5;
     }
 
+    public int getTurnosRestantes() {
+        return turnosRestantes;
+    }
+
     public void reducirTurno() {
         turnosRestantes--;
     }

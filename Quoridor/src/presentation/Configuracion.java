@@ -194,7 +194,7 @@ public class Configuracion extends JFrame {
             barrerasI = Boolean.parseBoolean(barreras);
             casillas = (String) comboBox5.getSelectedItem();
             casillasI = Boolean.parseBoolean(casillas);
-            abrirJuego(NombreJ1,NombreJ2,tipoJ1,tipoJ2,modoJuego,barrerasI,casillasI);
+            abrirJuego(NombreJ1,NombreJ2,tipoJ1,tipoJ2,modoJuego,barrerasI,casillasI,ColorP1,ColorP2);
         });
 
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -205,8 +205,8 @@ public class Configuracion extends JFrame {
         });
     }
 
-    private void abrirJuego(String nombreJ1, String nombreJ2, String tipoJ1, String tipoJ2, String modoJuego, boolean barreras, boolean casillas) {
-        Juego juego = new Juego(nombreJ1,nombreJ2,tipoJ1,tipoJ2,modoJuego,barreras,casillas);
+    private void abrirJuego(String nombreJ1, String nombreJ2, String tipoJ1, String tipoJ2, String modoJuego, boolean barreras, boolean casillas,Color color1 ,Color color2) {
+        Juego juego = new Juego(nombreJ1,nombreJ2,tipoJ1,tipoJ2,modoJuego,barreras,casillas,color1,color2);
         juego.setVisible(true);
         this.dispose();
     }

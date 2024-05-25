@@ -13,16 +13,19 @@ public class Juego extends JFrame{
 
     private Quoridor Game;
     private JPanel Juego,Player1,Player2;
-    private CirculoEnBoton[][] buttons;
+    private BotonConFicha[][] buttons;
     private JMenu archivo, settings;
     private JMenuBar menuBar;
     private JMenuItem load, save, start, quit, terminar;
     private int Posx,Posy,Table;
     private Jugador jugador1,jugador2;
+    private Color colorj1 ,colorj2;
 
-    public Juego(String nombreJ1, String nombreJ2, String tipoJ1, String tipoJ2, String modoJuego, boolean barreras, boolean casillas){
-       prepareElements(nombreJ1 , nombreJ2 , tipoJ1 , tipoJ2 , modoJuego , barreras , casillas);
-       prepareActions();
+    public Juego(String nombreJ1, String nombreJ2, String tipoJ1, String tipoJ2, String modoJuego, boolean barreras, boolean casillas,Color colorj1 ,Color colorj2){
+        this.colorj1 = colorj1;
+        this.colorj2 = colorj2;
+        prepareElements(nombreJ1 , nombreJ2 , tipoJ1 , tipoJ2 , modoJuego , barreras , casillas);
+        prepareActions();
     }
     
     private void prepareElements(String nombreJ1, String nombreJ2, String tipoJ1, String tipoJ2, String modoJuego, boolean barreras, boolean casillas) {
@@ -45,11 +48,10 @@ public class Juego extends JFrame{
         //--------------------------------------------//
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        buttons = new CirculoEnBoton[10][10];
+        buttons = new BotonConFicha[10][10];
         for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
-                buttons[row][col] = new CirculoEnBoton(); ;
-                buttons[row][col].setBackground(Color.WHITE);
+                buttons[row][col] = new BotonConFicha();
                 gbc.gridx = col;
                 gbc.gridy = row;
                 gbc.weightx = 1.0 / 10;
@@ -59,16 +61,18 @@ public class Juego extends JFrame{
                 Juego.add(buttons[row][col], gbc);
             }
         }
-
-        Player1 = createPlayerPanel("Jugador 1", Color.RED, "NombreJ1");
-        Player2 = createPlayerPanel("Jugador 2", Color.BLUE, "NombreJ2");
-
+        // Colocacion Jugadores //
+        buttons[0][(10/2)-1].setColorFicha(colorj1);
+        buttons[10-1][(10/2)-1].setColorFicha(colorj2);
+        //----------------------//
+        Player1 = createPlayerPanel("Jugador 1", colorj1, nombreJ1,jugador1.getBarreras());
+        Player2 = createPlayerPanel("Jugador 2", colorj2, nombreJ2,jugador2.getBarreras());
         getContentPane().add(Juego, BorderLayout.CENTER);
         add(Player1, BorderLayout.WEST);
         add(Player2, BorderLayout.EAST);
     }
 
-    private JPanel createPlayerPanel(String title, Color color, String nombre) {
+    private JPanel createPlayerPanel(String title, Color color, String nombre ,int barrerasRestantes) {
         JPanel playerPanel = new JPanel();
         playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
         playerPanel.setBorder(BorderFactory.createTitledBorder(title));
@@ -76,17 +80,17 @@ public class Juego extends JFrame{
         JLabel nombreLabel = new JLabel("Nombre:");
         JLabel colorLabel = new JLabel("Color:");
         JLabel barrerasLabel = new JLabel("Barreras disponibles:");
-        JLabel tiempoLabel = new JLabel("Tiempo invertido:");
-        JLabel puntajeLabel = new JLabel("Puntaje:");
+        JLabel tiempoLabel = new JLabel("Tiempo restante:");
+        JLabel puntajeLabel = new JLabel("Tiempo de jugada restante:");
 
         JLabel nombreValue = new JLabel(nombre);
         nombreValue.setForeground(Color.BLACK);
         JPanel colorPanel = new JPanel();
         colorPanel.setBackground(color);
 
-        JLabel BarrerasValue = new JLabel("10");
-        JLabel tiempoValue = new JLabel("2 horas 15 minutos");
-        JLabel puntajeValue = new JLabel("1500 puntos");
+        JLabel BarrerasValue = new JLabel(String.valueOf(barrerasRestantes));
+        JLabel tiempoValue = new JLabel("2 horas");
+        JLabel SegmentoValue = new JLabel("30 segundos");
 
         playerPanel.add(nombreLabel);
         playerPanel.add(nombreValue);
@@ -101,7 +105,7 @@ public class Juego extends JFrame{
         playerPanel.add(tiempoValue);
         playerPanel.add(Box.createVerticalStrut(10));
         playerPanel.add(puntajeLabel);
-        playerPanel.add(puntajeValue);
+        playerPanel.add(SegmentoValue);
 
         return playerPanel;
     }
@@ -161,7 +165,7 @@ public class Juego extends JFrame{
                                 if (buttons[row][col] == selectedButton) {
                                     Posx = row;
                                     Posy = col;
-                                    //Jugada(Posx, Posy);
+                                    jugada(Posx, Posy);
                                     System.out.println("Botón seleccionado en la posición: (" + row + ", " + col + ")");
                                     return;
                                 }
@@ -206,26 +210,47 @@ public class Juego extends JFrame{
             }
         });
     }
-}
 
-class CirculoEnBoton extends JButton {
-    private Color colorCirculo;
+    private void jugada(int x,int y){
 
-    public CirculoEnBoton() {
-        super();
-        this.colorCirculo = null;
     }
 
-    public void setColorCirculo(Color color) {
-        this.colorCirculo = color;
+
+
+}
+
+class BotonConFicha extends JButton {
+    private Color colorFicha,fondo;
+
+    public BotonConFicha() {
+        colorFicha = new Color(55, 131, 130);
+        fondo = new Color(55, 131, 130);
+    }
+
+    public void setColorFichaFondo(Color colorEstrellafondo) {
+        this.fondo = colorEstrellafondo;
+        repaint();
+    }
+
+    public void setColorFicha(Color colorEstrella) {
+        this.colorFicha = colorEstrella;
         repaint();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int diametro = Math.min(getWidth(), getHeight()) - 6; // Diámetro del círculo
-        g.setColor(colorCirculo);
-        g.fillOval((getWidth() - diametro) / 2, (getHeight() - diametro) / 2, diametro, diametro);
+
+        // Obtén las dimensiones del botón
+        int width = getWidth();
+        int height = getHeight();
+
+        // Dibuja el fondo del botón
+        g.setColor(fondo);
+        g.fillRect(0, 0, width, height);
+
+        // Dibuja la ficha
+        g.setColor(colorFicha);
+        g.fillOval(width / 4, height / 4, width / 2, height / 2);
     }
 }
