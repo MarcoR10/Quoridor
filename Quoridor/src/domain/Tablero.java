@@ -54,6 +54,16 @@ public class Tablero {
     public void moverFicha(Jugador jugadoractual,int fila,int columna) {
         Point coor = jugadoractual.getFicha().getCoordenadas();
         Casilla casillaProxima = casillas[fila][columna];
+
+        if (casillaProxima.getBarrera() instanceof Aliadas) {
+            Aliadas barreraAliada = (Aliadas) casillaProxima.getBarrera();
+            if (!barreraAliada.bloqueaCamino(fila, columna, jugadoractual)) {
+                actualizarCasilla(coor.x, coor.y, fila, columna, jugadoractual);
+                jugadoractual.getFicha().mover(fila, columna);
+                return;
+            }
+        }
+
         if (casillaProxima instanceof Teletransportador) {
             if (movimientoValido(fila, columna, coor.x, coor.y)){
                 actualizarCasilla(coor.x, coor.y, fila, columna, jugadoractual);
@@ -99,9 +109,47 @@ public class Tablero {
     public void colocarPared(int filaInicio, int columnaInicio, int filaFin, int columnaFin,Jugador jugador,boolean barrerasE) {
         if (barrerasE){
             System.out.println("Escoge el tipo de barrera que quieres : \n 1. Normal 2. Temporal 3.Larga 4.Aliadas ");
-            scanner.nextLine();
             int tipo = Integer.parseInt(scanner.nextLine());
-            //switch ()
+            Barrera barrera1 = null;
+            Barrera barrera2 = null;
+            switch (tipo) {
+                case 1:
+                    barrera1 = new BarreraNormal(filaInicio, columnaInicio, jugador);
+                    barrera2 = new BarreraNormal(filaInicio, columnaInicio, jugador);
+                    casillas[filaInicio][columnaInicio].setBarrera(barrera1);
+                    casillas[filaFin][columnaFin].setBarrera(barrera2);
+                    break;
+                case 2:
+                    barrera1 = new Temporal(filaInicio, columnaInicio, jugador);
+                    barrera2 = new Temporal(filaInicio, columnaInicio, jugador);
+                    casillas[filaInicio][columnaInicio].setBarrera(barrera1);
+                    casillas[filaFin][columnaFin].setBarrera(barrera2);
+                    break;
+                case 3:
+                    barrera1 = new Larga(filaInicio, columnaInicio, jugador);
+                    barrera2 = new Larga(filaInicio, columnaInicio, jugador);
+                    //-------------------------------------------------------------------------------//
+                    System.out.println("Ingrese las coordenadas extra (x y):");
+                    String BarreL = scanner.nextLine();
+                    String[] barreE = BarreL.split(" ");
+                    //-------------------------------------------------------------------------------//
+                    int filaE = Integer.parseInt(barreE[0]);
+                    int columnaE = Integer.parseInt(barreE[1]);
+                    Barrera barrera3 = new Larga(filaE, columnaE, jugador);;
+                    //-------------------------------------------------------------------------------//
+                    casillas[filaInicio][columnaInicio].setBarrera(barrera1);
+                    casillas[filaFin][columnaFin].setBarrera(barrera2);
+                    casillas[filaE][columnaE].setBarrera(barrera3);
+                    break;
+                case 4:
+                    barrera1 = new Aliadas(filaInicio, columnaInicio, jugador);
+                    barrera2 = new BarreraNormal(filaInicio, columnaInicio, jugador);
+                    casillas[filaInicio][columnaInicio].setBarrera(barrera1);
+                    casillas[filaFin][columnaFin].setBarrera(barrera2);
+                    break;
+                default:
+                    System.out.println("Tipo de barrera no válido.");
+            }
         }else {
             Barrera BarreI = new BarreraNormal(filaInicio, columnaInicio, jugador);
             Barrera BarreF = new BarreraNormal(filaInicio, columnaInicio, jugador);
@@ -153,6 +201,21 @@ public class Tablero {
         casillaAnterior.setJugadorNull();
         casillaNueva.setJugador(jugador);
     }
+
+    public void reducirTurnosBarrerasTemporales() {
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                Barrera barrera = casillas[i][j].getBarrera();
+                if (barrera instanceof Temporal) {
+                    ((Temporal) barrera).reducirTurno();
+                    if (!((Temporal) barrera).esActiva()) {
+                        casillas[i][j].setBarrera(null);
+                    }
+                }
+            }
+        }
+    }
+
 
     public Casilla getCasilla(int fila, int columna) {
         return casillas[fila][columna];

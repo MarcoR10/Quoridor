@@ -66,6 +66,7 @@ public class Quoridor implements Serializable {
                     System.out.println("Opción no válida. Por favor, seleccione 1 o 2.");
             }
             cambiarTurno();
+            tablero.reducirTurnosBarrerasTemporales();
         }
     }
 
@@ -91,7 +92,7 @@ public class Quoridor implements Serializable {
     public static void main(String[] args) {
         Humano jugador1 = new Humano("Zen","Rojo");
         Humano jugador2 = new Humano("Bigotes","Azul");
-        Quoridor game = new Quoridor(5, 5,jugador1,jugador2,true,false,"Normal");
+        Quoridor game = new Quoridor(3, 3,jugador1,jugador2,false,true,"Normal");
         game.jugar();
     }
 

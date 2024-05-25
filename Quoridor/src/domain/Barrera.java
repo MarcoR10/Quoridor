@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public abstract class Barrera implements Serializable {
 
-    protected int fila,columna;
+    protected int fila,columna,longitud;
     protected Jugador propietario;
 
     public Barrera(int filaIn,int columnaIn,Jugador jugadorActual){

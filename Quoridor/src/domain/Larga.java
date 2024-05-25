@@ -11,4 +11,5 @@ public class Larga extends Barrera implements Serializable {
     public boolean bloqueaCamino(int fila, int columna, Jugador jugadorActual) {
         return false;
     }
+
 }
