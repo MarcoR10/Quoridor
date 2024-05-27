@@ -21,6 +21,7 @@ public class Panel_Inicial extends JFrame{
     public void prepareElements() {
         setTitle("QuoriPoob");
         Pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/Quoridor1.jpg")).getImage());
         setSize(Pantalla.width/2, Pantalla.height/2);
         setLocationRelativeTo(null);
         PanelInicial();

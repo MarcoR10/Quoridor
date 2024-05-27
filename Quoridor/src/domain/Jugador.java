@@ -19,7 +19,7 @@ public abstract class Jugador implements Serializable {
     public abstract void jugar(int x, int y);
 
     public String getNombre(){
-        return nombre.substring(0, 1).toUpperCase();
+        return nombre;
     }
 
     public int getBarreras() {

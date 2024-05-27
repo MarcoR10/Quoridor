@@ -27,6 +27,7 @@ public class Configuracion extends JFrame {
         //-------------------------//
         setTitle("Configuracion");
         Pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/Quoridor1.jpg")).getImage());
         setSize(Pantalla.width, Pantalla.height);
         setLocationRelativeTo(null);
         setLayout(null);
@@ -196,7 +197,6 @@ public class Configuracion extends JFrame {
             casillasI = Boolean.parseBoolean(casillas);
             abrirJuego(NombreJ1,NombreJ2,tipoJ1,tipoJ2,modoJuego,barrerasI,casillasI,ColorP1,ColorP2);
         });
-
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent ev) {

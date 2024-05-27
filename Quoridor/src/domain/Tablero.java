@@ -45,10 +45,10 @@ public class Tablero {
             }
         }
         // Colocacion Jugadores //
-        casillas[0][(columna/2)-1].setJugador(jugador1);
-        jugador1.getFicha().setCoordenadas(new Point(0,(columna/2)-1));
-        casillas[fila-1][(columna/2)-1].setJugador(jugador2);
-        jugador2.getFicha().setCoordenadas(new Point(fila-1,(columna/2)-1));
+        casillas[0][(columna/2)].setJugador(jugador1);
+        jugador1.getFicha().setCoordenadas(new Point(0,columna/2));
+        casillas[fila-1][(columna/2)].setJugador(jugador2);
+        jugador2.getFicha().setCoordenadas(new Point(fila-1,columna/2));
     }
 
     public void moverFicha(Jugador jugadoractual,int fila,int columna) {

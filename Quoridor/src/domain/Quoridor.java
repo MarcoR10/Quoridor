@@ -93,10 +93,18 @@ public class Quoridor implements Serializable {
         return jugadorActual;
     }
 
+    public Tablero getTablero() {
+        return tablero;
+    }
+
+    public boolean getBarerrasE(){
+        return barreras;
+    }
+
     public static void main(String[] args) {
         Humano jugador1 = new Humano("Zen","Rojo");
         Humano jugador2 = new Humano("Bigotes","Azul");
-        Quoridor game = new Quoridor(3, 3,jugador1,jugador2,false,true,"Normal");
+        Quoridor game = new Quoridor(9, 9,jugador1,jugador2,false,false,"Normal");
         game.jugar();
     }
 
