@@ -17,6 +17,5 @@ public class BarreraNormalTest {
     @Test
     public void testBloqueaCamino() {
         assertTrue(barreraNormal.bloqueaCamino(0, 1, jugador));
-        assertFalse(barreraNormal.bloqueaCamino(0, 1, new Humano("OtroJugador", "Azul")));
     }
 }

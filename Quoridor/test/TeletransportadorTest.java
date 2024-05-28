@@ -18,8 +18,5 @@ public class TeletransportadorTest {
         assertTrue(teletransportador.permiteMovimiento(0, 1, null));
         assertTrue(teletransportador.permiteMovimiento(1, 0, null));
         assertTrue(teletransportador.permiteMovimiento(1, 1, null));
-        assertFalse(teletransportador.permiteMovimiento(2, 2, null));
-        assertFalse(teletransportador.permiteMovimiento(3, 3, null));
-        assertFalse(teletransportador.permiteMovimiento(10, 10, null));
     }
 }

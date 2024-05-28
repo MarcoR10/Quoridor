@@ -1,24 +1,50 @@
 package domain;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Tablero {
+
+/**
+ * La clase Tablero representa el tablero de juego.
+ */
+public class Tablero implements Serializable {
 
     private Casilla[][] casillas;
     private int filas,columnas;
     private boolean casillasE;
-    private Scanner scanner;
+    //private Scanner scanner;
+
+    /**
+     * Constructor para inicializar el tablero.
+     *
+     * @param filas     Número de filas del tablero.
+     * @param columnas  Número de columnas del tablero.
+     * @param jugador1  Primer jugador.
+     * @param jugador2  Segundo jugador.
+     * @param casillaE  Indica si se utilizarán casillas especiales.
+     * @param barreraE  Indica si se utilizarán barreras especiales.
+     */
 
     public Tablero(int filas,int columnas,Jugador jugador1 , Jugador jugador2,boolean casillaE,boolean barreraE){
         this.filas = filas;
         this.columnas = columnas;
         this.casillasE = casillaE;
         casillas = new Casilla[this.filas][this.columnas];
-        this.scanner = new Scanner(System.in);
+        //this.scanner = new Scanner(System.in);
         Inicio(this.filas,this.columnas,jugador1,jugador2,casillaE);
     }
+
+    /**
+     * Método para inicializar el tablero y colocar los jugadores.
+     *
+     * @param fila      Número de filas del tablero.
+     * @param columna   Número de columnas del tablero.
+     * @param jugador1  Primer jugador.
+     * @param jugador2  Segundo jugador.
+     * @param casillasE Indica si se utilizarán casillas especiales.
+     */
 
     public void Inicio(int fila,int columna,Jugador jugador1 , Jugador jugador2,boolean casillasE){
         if(casillasE){
@@ -51,7 +77,15 @@ public class Tablero {
         jugador2.getFicha().setCoordenadas(new Point(fila-1,columna/2));
     }
 
-    public void moverFicha(Jugador jugadoractual,int fila,int columna) {
+    /**
+     * Método para mover la ficha de un jugador.
+     *
+     * @param jugadoractual El jugador actual.
+     * @param fila          Fila a la que se desea mover.
+     * @param columna       Columna a la que se desea mover.
+     */
+
+    public void moverFicha(Jugador jugadoractual,int fila,int columna,int filaT,int columnaT) {
         Point coor = jugadoractual.getFicha().getCoordenadas();
         Casilla casillaProxima = casillas[fila][columna];
 
@@ -63,18 +97,10 @@ public class Tablero {
                 return;
             }
         }
-
         if (casillaProxima instanceof Teletransportador) {
             if (movimientoValido(fila, columna, coor.x, coor.y)){
                 actualizarCasilla(coor.x, coor.y, fila, columna, jugadoractual);
                 jugadoractual.getFicha().mover(fila,columna);
-                //-------------------------------------------------------------------------------//
-                System.out.println("Ingrese las coordenadas alas que desea teleportarse (x y):");
-                String MovT = scanner.nextLine();
-                String[] telpot = MovT.split(" ");
-                //-------------------------------------------------------------------------------//
-                int filaT = Integer.parseInt(telpot[0]);
-                int columnaT = Integer.parseInt(telpot[1]);
                 //-------------------------------------------------------------------------------//
                 if (((Teletransportador) casillaProxima).permiteMovimiento(filaT,columnaT,this)){
                     Point coor2 = jugadoractual.getFicha().getCoordenadas();
@@ -106,35 +132,40 @@ public class Tablero {
 
     }
 
-    public void colocarPared(int filaInicio, int columnaInicio, int filaFin, int columnaFin,Jugador jugador,boolean barrerasE) {
+    /**
+     * Método para colocar una pared en el tablero.
+     *
+     * @param filaInicio    Fila de inicio de la pared.
+     * @param columnaInicio Columna de inicio de la pared.
+     * @param filaFin       Fila de fin de la pared.
+     * @param columnaFin    Columna de fin de la pared.
+     * @param jugador       Jugador que coloca la pared.
+     * @param barrerasE     Indica si se utilizan barreras especiales.
+     */
+
+    public void colocarPared(int filaInicio, int columnaInicio, int filaFin, int columnaFin,Jugador jugador,boolean barrerasE,int opcionBarrera,int filaE, int columnaE) {
         if (barrerasE){
-            System.out.println("Escoge el tipo de barrera que quieres : \n 1. Normal 2. Temporal 3.Larga 4.Aliadas ");
-            int tipo = Integer.parseInt(scanner.nextLine());
+            int tipo = opcionBarrera;
             Barrera barrera1 = null;
             Barrera barrera2 = null;
             switch (tipo) {
                 case 1:
                     barrera1 = new BarreraNormal(filaInicio, columnaInicio, jugador);
                     barrera2 = new BarreraNormal(filaInicio, columnaInicio, jugador);
+                    //-------------------------------------------------------------------------------//
                     casillas[filaInicio][columnaInicio].setBarrera(barrera1);
                     casillas[filaFin][columnaFin].setBarrera(barrera2);
                     break;
                 case 2:
                     barrera1 = new Temporal(filaInicio, columnaInicio, jugador);
                     barrera2 = new Temporal(filaInicio, columnaInicio, jugador);
+                    //-------------------------------------------------------------------------------//
                     casillas[filaInicio][columnaInicio].setBarrera(barrera1);
                     casillas[filaFin][columnaFin].setBarrera(barrera2);
                     break;
                 case 3:
                     barrera1 = new Larga(filaInicio, columnaInicio, jugador);
                     barrera2 = new Larga(filaInicio, columnaInicio, jugador);
-                    //-------------------------------------------------------------------------------//
-                    System.out.println("Ingrese las coordenadas extra (x y):");
-                    String BarreL = scanner.nextLine();
-                    String[] barreE = BarreL.split(" ");
-                    //-------------------------------------------------------------------------------//
-                    int filaE = Integer.parseInt(barreE[0]);
-                    int columnaE = Integer.parseInt(barreE[1]);
                     Barrera barrera3 = new Larga(filaE, columnaE, jugador);;
                     //-------------------------------------------------------------------------------//
                     casillas[filaInicio][columnaInicio].setBarrera(barrera1);
@@ -144,6 +175,7 @@ public class Tablero {
                 case 4:
                     barrera1 = new Aliadas(filaInicio, columnaInicio, jugador);
                     barrera2 = new BarreraNormal(filaInicio, columnaInicio, jugador);
+                    //-------------------------------------------------------------------------------//
                     casillas[filaInicio][columnaInicio].setBarrera(barrera1);
                     casillas[filaFin][columnaFin].setBarrera(barrera2);
                     break;
@@ -160,6 +192,14 @@ public class Tablero {
         }
     }
 
+    /**
+     * Verifica si la colocación de las barreras es válida.
+     *
+     * @param barreI Barrera de inicio.
+     * @param barreF Barrera de fin.
+     * @return true si la colocación es válida, false en caso contrario.
+     */
+
     private boolean esColocacionValida(Barrera barreI, Barrera barreF) {
         if (barreI == null && barreF == null) {
             return true;
@@ -173,6 +213,16 @@ public class Tablero {
         return !barreI.equals(barreF);
     }
 
+
+    /**
+     * Verifica si un movimiento es válido.
+     *
+     * @param filaNueva    Fila a la que se desea mover.
+     * @param columnaNueva Columna a la que se desea mover.
+     * @param filaActual   Fila actual.
+     * @param columnaActual Columna actual.
+     * @return true si el movimiento es válido, false en caso contrario.
+     */
     public boolean movimientoValido(int filaNueva, int columnaNueva, int filaActual, int columnaActual) {
         if (filaNueva < 0 || filaNueva >= filas || columnaNueva < 0 || columnaNueva >= columnas) {
             return false;
@@ -185,7 +235,12 @@ public class Tablero {
         return movimientoHorizontal || movimientoVertical;
     }
 
-
+    /**
+     * Método que implementa la lógica para verificar si hay al menos un camino disponible para cada jugador.
+     * Este método debe ser implementado con la lógica específica de búsqueda de caminos del juego.
+     *
+     * @return true si hay al menos un camino disponible, false en caso contrario.
+     */
     private boolean caminoDisponible() {
         // Implementar la lógica para verificar que al menos un camino está disponible para cada jugador
         // Esto generalmente implica realizar una búsqueda de caminos desde la posición actual de cada jugador
@@ -194,7 +249,15 @@ public class Tablero {
         return true; // Devuelve true si hay al menos un camino disponible
     }
 
-
+    /**
+     * Actualiza las casillas al mover un jugador.
+     *
+     * @param filaAnterior  Fila anterior.
+     * @param columnaAnterior Columna anterior.
+     * @param filaNueva     Nueva fila.
+     * @param columnaNueva  Nueva columna.
+     * @param jugador       Jugador que se mueve.
+     */
     public void actualizarCasilla(int filaAnterior, int columnaAnterior, int filaNueva, int columnaNueva, Jugador jugador) {
         Casilla casillaAnterior = casillas[filaAnterior][columnaAnterior];
         Casilla casillaNueva = casillas[filaNueva][columnaNueva];
@@ -202,6 +265,9 @@ public class Tablero {
         casillaNueva.setJugador(jugador);
     }
 
+    /**
+     * Reduce los turnos de las barreras temporales y las elimina si ya no están activas.
+     */
     public void reducirTurnosBarrerasTemporales() {
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
@@ -217,15 +283,32 @@ public class Tablero {
     }
 
 
+    /**
+     * Obtiene una casilla específica del tablero.
+     *
+     * @param fila    Fila de la casilla.
+     * @param columna Columna de la casilla.
+     * @return La casilla en la posición especificada.
+     */
+
     public Casilla getCasilla(int fila, int columna) {
         return casillas[fila][columna];
     }
 
+    /**
+     * Obtiene el número de filas del tablero.
+     *
+     * @return El número de filas.
+     */
     public int getFilas() {
         return filas;
     }
 
+    /**
+     * Imprime el tablero mostrando la ubicación de los jugadores y las barreras.
+     */
     public void imprimirTablero() {
+        System.out.println("------------------------------------");
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 if (casillas[i][j].getJugador() != null) {
@@ -240,6 +323,9 @@ public class Tablero {
         }
     }
 
+    /**
+     * Imprime el tablero mostrando el tipo de cada casilla.
+     */
     public void imprimirTipoTablero(){
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {

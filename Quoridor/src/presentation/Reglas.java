@@ -5,6 +5,10 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * La clase Reglas representa una ventana que muestra las reglas de un juego.
+ * Esta clase extiende JFrame e implementa ChangeListener y ActionListener.
+ */
 public class Reglas extends JFrame implements ChangeListener, ActionListener {
 
     private JLabel label1;
@@ -12,10 +16,16 @@ public class Reglas extends JFrame implements ChangeListener, ActionListener {
     private JButton botoncito1;
     private JTextArea area1;
 
+    /**
+     * Constructor de la clase Reglas. Prepara la interfaz de usuario.
+     */
     public Reglas() {
         prepareUI();
     }
 
+    /**
+     * Método privado para preparar la interfaz de usuario.
+     */
     private void prepareUI() {
         //-------------------------//
         setTitle("Reglas");
@@ -98,11 +108,18 @@ public class Reglas extends JFrame implements ChangeListener, ActionListener {
         setVisible(true);
     }
 
+    /**
+     * Método para cerrar la ventana de reglas.
+     */
     public void cerrarVentana() {
         setVisible(false);
         dispose();
     }
 
+    /**
+     * Método actionPerformed para manejar eventos de acción.
+     * @param e El evento de acción.
+     */
     public void actionPerformed(ActionEvent e) {
         botoncito1.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent reglas){
@@ -117,8 +134,12 @@ public class Reglas extends JFrame implements ChangeListener, ActionListener {
         });
     }
 
+    /**
+     * Método stateChanged para manejar cambios en el estado del checkbox.
+     * @param e El evento de cambio.
+     */
     public void stateChanged(ChangeEvent e) {
-
+        // Este método se deja vacío ya que no se necesita implementar en este contexto.
     }
 
 }

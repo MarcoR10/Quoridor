@@ -6,6 +6,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+
+/**
+ * La clase Configuracion extiende JFrame y se utiliza para crear una interfaz gráfica de configuración para un juego.
+ */
 public class Configuracion extends JFrame {
 
     private String NombreJ1, NombreJ2,tipoJ1,tipoJ2,modoJuego,casillas,barreras;
@@ -18,11 +22,20 @@ public class Configuracion extends JFrame {
     private Color ColorP1, ColorP2;
     private Dimension Pantalla;
 
+
+    /**
+     * Constructor de la clase Configuracion.
+     * Inicializa los elementos de la interfaz y prepara las acciones correspondientes.
+     */
     public Configuracion() {
         prepareElements();
         prepareActions();
     }
 
+
+    /**
+     * Método para preparar los elementos de la interfaz gráfica.
+     */
     private void prepareElements() {
         //-------------------------//
         setTitle("Configuracion");
@@ -144,6 +157,9 @@ public class Configuracion extends JFrame {
         add(PanelConfiguracion);
     }
 
+    /**
+     * Método para preparar las acciones de los componentes de la interfaz gráfica.
+     */
     private void prepareActions() {
         colorJugador1.addActionListener(new ActionListener() {
             @Override
@@ -205,12 +221,28 @@ public class Configuracion extends JFrame {
         });
     }
 
+    /**
+     * Método para abrir el juego con las configuraciones seleccionadas.
+     *
+     * @param nombreJ1 Nombre del Jugador 1
+     * @param nombreJ2 Nombre del Jugador 2
+     * @param tipoJ1 Tipo del Jugador 1 (Humano/Máquina)
+     * @param tipoJ2 Tipo del Jugador 2 (Humano/Máquina)
+     * @param modoJuego Modo de juego seleccionado
+     * @param barreras Indica si se usan barreras especiales
+     * @param casillas Indica si se usan casillas especiales
+     * @param color1 Color seleccionado para el Jugador 1
+     * @param color2 Color seleccionado para el Jugador 2
+     */
     private void abrirJuego(String nombreJ1, String nombreJ2, String tipoJ1, String tipoJ2, String modoJuego, boolean barreras, boolean casillas,Color color1 ,Color color2) {
         Juego juego = new Juego(nombreJ1,nombreJ2,tipoJ1,tipoJ2,modoJuego,barreras,casillas,color1,color2);
         juego.setVisible(true);
         this.dispose();
     }
 
+    /**
+     * Método para confirmar la salida de la aplicación.
+     */
     private void Salida() {
         if (JOptionPane.showConfirmDialog(rootPane, "¿Seguro que quiere salir?", "Salir del sistema", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             System.exit(0);
@@ -219,9 +251,19 @@ public class Configuracion extends JFrame {
 
 }
 
+
+
+/**
+ * La clase BackgroundPanel extiende JPanel y se utiliza para mostrar una imagen de fondo.
+ */
 class BackgroundPanel extends JPanel {
     private Image backgroundImage;
 
+    /**
+     * Constructor de la clase BackgroundPanel.
+     *
+     * @param backgroundImage Imagen de fondo a utilizar
+     */
     public BackgroundPanel(Image backgroundImage) {
         this.backgroundImage = backgroundImage;
     }

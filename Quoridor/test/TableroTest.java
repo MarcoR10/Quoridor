@@ -26,14 +26,14 @@ public class TableroTest {
 
     @Test
     public void testMoverFicha() {
-        tablero.moverFicha(jugador1, 1, 1);
+        tablero.moverFicha(jugador1, 1, 1,0,0);
         assertEquals(jugador1, tablero.getCasilla(1, 1).getJugador());
         assertNull(tablero.getCasilla(0, 1).getJugador());
     }
 
     // @Test
     public void testColocarPared() {
-        tablero.colocarPared(1, 0, 1, 1, jugador1, true);
+        tablero.colocarPared(1, 0, 1, 1, jugador1, true,0,0,0);
         assertTrue(tablero.getCasilla(1, 0).getBarrera() instanceof BarreraNormal);
         assertTrue(tablero.getCasilla(1, 1).getBarrera() instanceof BarreraNormal);
     }

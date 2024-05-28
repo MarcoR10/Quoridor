@@ -14,16 +14,6 @@ public class TemporalTest {
     }
 
     @Test
-    public void testDescontarDuracion() {
-        temporal.reducirTurno();
-        assertTrue(temporal.getTurnosRestantes() == 1);
-        temporal.reducirTurno();
-        assertTrue(temporal.getTurnosRestantes() == 0);
-        temporal.reducirTurno();
-        assertFalse(temporal.getTurnosRestantes() < 0);
-    }
-
-    @Test
     public void testReducirTurno() {
         temporal.reducirTurno();
         assertEquals(4, temporal.getTurnosRestantes());

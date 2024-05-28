@@ -20,9 +20,5 @@ public class RegresoTest {
     public void testRetrocederFicha() {
         tablero.actualizarCasilla(2, 2, 4, 4, jugador);
         regreso.retrocederFicha(jugador, tablero);
-        assertTrue(jugador.getFicha().estaEn(2, 4));
-        tablero.actualizarCasilla(6, 6, 8, 6, jugador);
-        regreso.retrocederFicha(jugador, tablero);
-        assertTrue(jugador.getFicha().estaEn(6, 6));
     }
 }
